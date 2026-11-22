@@ -2,6 +2,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
   openerFor,
   openExternal,
+  openWebPage,
   type Launch,
   type OpenerFacts,
 } from "../../../src/core/export/open-external.js";
@@ -39,14 +40,17 @@ describe("openerFor", () => {
     }
   });
 
-  it.each([
-    ["a relative path", "reports\\report.html"],
-    ["a comma, which explorer reads as a separator", "C:\\Users\\Doe, Jane\\report.html"],
-    ["a quote", 'C:\\r\\"report".html'],
-  ])("refuses %s on Windows", (_case, file) => {
-    expect(openerFor(file, facts({ platform: "win32", env: { SystemRoot: "C:\\Windows" } }))).toEqual({
-      reason: expect.any(String),
+  it("refuses a relative path on Windows", () => {
+    expect(openerFor("reports\\report.html", facts({ platform: "win32" }))).toEqual({
+      reason: "not an absolute path",
     });
+  });
+
+  // Separators to explorer only when unquoted: the runner quotes every argument on Windows.
+  it("hands explorer a path holding a comma or an equals sign as it is", () => {
+    const file = "C:\\Users\\Doe, Jane\\a=b\\report.html";
+
+    expect(openerFor(file, facts({ platform: "win32" }))).toMatchObject({ args: [file] });
   });
 
   it("opens with /usr/bin/open on macOS", () => {
@@ -176,5 +180,41 @@ describe("openExternal: an HTML page only", () => {
     expect(openerFor("\\\\?\\C:\\Users\\user\\rapport.html", facts({ platform: "win32" }))).toMatchObject({
       args: ["\\\\?\\C:\\Users\\user\\rapport.html"],
     });
+  });
+});
+
+describe("openWebPage", () => {
+  const FORM = "https://example.test/gup/fr/?install=abc&version=1.0.0&platform=win32#feedback";
+
+  it("hands an https page to the platform's launcher", async () => {
+    const launch = vi.fn<Launch>(async () => true);
+
+    const result = await openWebPage(FORM, { platform: "darwin", env: {}, launch });
+
+    expect(result).toEqual({ opened: true, launcher: "/usr/bin/open" });
+    expect(launch).toHaveBeenCalledWith("/usr/bin/open", [FORM]);
+  });
+
+  it("opens through explorer.exe on Windows, the address as its only argument", async () => {
+    const launch = vi.fn<Launch>(async () => true);
+
+    await openWebPage(FORM, { platform: "win32", env: { SystemRoot: "C:\\Windows" }, launch });
+
+    expect(launch).toHaveBeenCalledWith("C:\\Windows\\explorer.exe", [FORM]);
+  });
+
+  it.each([
+    ["a file URL", "file:///C:/Windows/System32/calc.exe"],
+    ["a script URL", "javascript:alert(1)"],
+    ["clear text to another machine", "http://example.test/gup/"],
+    ["credentials", "https://user:pass@example.test/"],
+    ["no URL at all", "C:\\r\\report.html"],
+  ])("refuses %s without launching anything", async (_case, url) => {
+    const launch = vi.fn<Launch>(async () => true);
+
+    const result = await openWebPage(url, { platform: "darwin", env: {}, launch });
+
+    expect(result).toMatchObject({ opened: false, launcher: null });
+    expect(launch).not.toHaveBeenCalled();
   });
 });

@@ -201,6 +201,26 @@ const PNPM = selfCase("pnpm", {
   },
 });
 
+/** Vite+ from its PowerShell installer: `vp upgrade`, against the `vite-plus` npm package. */
+export const VP_MACHINE: SystemSpec = {
+  platform: "win32",
+  bin: { vp: "C:\\Users\\u\\AppData\\Local\\vite-plus\\bin\\vp.exe" },
+  // Recorded from vp 1.7.0: the version, then a report of the project's tools.
+  commands: [
+    versionProbe(
+      "vp",
+      "vp v1.6.2\n\nLocal vite-plus:\n  vite-plus  Not found\n\nEnvironment:\n  Node.js          v26.13.1\n",
+    ),
+  ],
+  http: [npmLatestRoute("vite-plus", "1.7.0")],
+};
+
+const VP = selfCase("vp", {
+  system: VP_MACHINE,
+  row: [{ id: "vp", name: "Vite+", current: "1.6.2", latest: "1.7.0" }],
+  update: { packageId: "vp", installs: [["vp", "upgrade"]] },
+});
+
 /** Yarn classic outside Corepack, on a machine without Corepack: npm reinstalls it. */
 export const YARN_MACHINE: SystemSpec = {
   platform: "linux",
@@ -267,6 +287,7 @@ export const selfCases: readonly ProviderContractCase[] = [
   NPM,
   PNPM,
   YARN,
+  VP,
   PIP,
   PIPX,
 ];

@@ -1,4 +1,5 @@
 import { BunGlobalProvider } from "../../../src/providers/node/bun-global.js";
+import { VpGlobalProvider } from "../../../src/providers/node/vp-global.js";
 import { CorepackProvider } from "../../../src/providers/node/corepack.js";
 import { NpmGlobalProvider } from "../../../src/providers/node/npm-global.js";
 import { PnpmGlobalProvider } from "../../../src/providers/node/pnpm-global.js";
@@ -188,6 +189,41 @@ const BUN: ProviderContractCase = {
   batchInstalls: [["bun", "update", "-g"]],
 };
 
+// --- Vite+ ----------------------------------------------------------------------
+
+const VP_OUTDATED_ARGV = ["vp", "outdated", "-g", "--format", "json"];
+
+/** vp printing `report` (and `stderr`) for `vp outdated -g --format json`, exiting `exitCode`. */
+export function vpMachine(report: string, stderr = "", exitCode = 1): SystemSpec {
+  return {
+    platform: "win32",
+    bin: { vp: "C:\\Users\\u\\AppData\\Local\\vite-plus\\bin\\vp.exe" },
+    commands: [{ argv: VP_OUTDATED_ARGV, stdout: report, stderr, exitCode }],
+  };
+}
+
+/** Recorded from vp 1.7.0 on Windows; a package already current is not listed. */
+const VP: ProviderContractCase = {
+  create: () => new VpGlobalProvider(),
+  system: vpMachine(
+    JSON.stringify({
+      neon: {
+        current: "9.9.1",
+        wanted: "9.9.3",
+        latest: "9.9.3",
+        dependent: "global",
+        location:
+          "C:\\Users\\u\\AppData\\Local\\vite-plus\\data\\packages\\neon\\0\\node_modules\\neon",
+      },
+      "@readwise/cli": { current: "0.5.11", wanted: "0.5.11", latest: "0.5.11", dependent: "global" },
+    }),
+  ),
+  outdated: [{ id: "neon", name: "neon", current: "9.9.1", latest: "9.9.3" }],
+  update: { packageId: "neon", installs: [["vp", "update", "-g", "--latest", "neon"]] },
+  updateAll: "one-batch",
+  batchInstalls: [["vp", "update", "-g", "--latest", "neon"]],
+};
+
 // --- Corepack -------------------------------------------------------------------
 
 /** Node's own directory: corepack and the shims it installed for pnpm and yarn. */
@@ -222,4 +258,4 @@ const COREPACK: ProviderContractCase = {
   updateAll: "per-package",
 };
 
-export const nodeCases: readonly ProviderContractCase[] = [NPM, PNPM, YARN, BUN, COREPACK];
+export const nodeCases: readonly ProviderContractCase[] = [NPM, PNPM, YARN, BUN, VP, COREPACK];

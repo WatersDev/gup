@@ -52,7 +52,7 @@ flowchart LR
     CLI --> Menu["menu<br/>full-screen app"]
     CLI --> Cmds["list · update · doctor<br/>log · report · schedule"]
     Menu & Cmds & Tick --> Engine["scan + update pipeline"]
-    Engine --> Registry[("registry<br/>153 providers")]
+    Engine --> Registry[("registry<br/>154 providers")]
     Registry --> Runner["runner<br/>argv only, no shell"]
     Runner --> Tools[("winget · npm · brew · pip · …")]
     Engine --> State[("local state<br/>history · log · settings · schedules")]

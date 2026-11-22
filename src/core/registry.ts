@@ -39,6 +39,7 @@ import { NpmGlobalProvider } from "../providers/node/npm-global.js";
 import { PnpmGlobalProvider } from "../providers/node/pnpm-global.js";
 import { YarnGlobalProvider } from "../providers/node/yarn-global.js";
 import { BunGlobalProvider } from "../providers/node/bun-global.js";
+import { VpGlobalProvider } from "../providers/node/vp-global.js";
 import { DenoProvider } from "../providers/node/deno.js";
 import { CorepackProvider } from "../providers/node/corepack.js";
 import { FnmProvider } from "../providers/node/fnm.js";
@@ -248,6 +249,7 @@ export const ALL_PROVIDERS: Provider[] = [
   new PnpmGlobalProvider(),
   new YarnGlobalProvider(),
   new BunGlobalProvider(),
+  new VpGlobalProvider(),
   new DenoProvider(),
   new CorepackProvider(),
 

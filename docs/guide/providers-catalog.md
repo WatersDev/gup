@@ -163,6 +163,7 @@ the distro is upgraded through `sudo apt-get install --only-upgrade` /
 | `pnpm-g` | pnpm global (pnpm itself through `pnpm self-update`) | ✅ |
 | `yarn-g` | Yarn global | ✅ |
 | `bun-g` | Bun global | ✅ |
+| `vp-g` | Vite+ global (`vp install -g`; Vite+ itself through `self:vp`) | ✅ |
 | `deno` | Deno runtime | ✅ |
 | `corepack` | Corepack | ✅ |
 | `fnm` | fnm | ✅ |
@@ -404,6 +405,7 @@ GUI. (Until 0.5.0 they existed as unregistered code in `src/providers/ide/`.)
 | `self:npm` | npm registry | `npm install -g npm@latest` | ✅ |
 | `self:pnpm` | npm registry | `pnpm self-update`; a failure when the `pnpm` on `PATH` keeps its version | ✅ |
 | `self:yarn` | npm registry | `corepack prepare yarn@stable --activate` | ✅ |
+| `self:vp` | npm registry (`vite-plus`) | `vp upgrade` | ✅ |
 | `self:pip` | PyPI | `python -m pip install --user -U pip` | ✅ |
 | `self:pipx` | PyPI | `pipx upgrade pipx` | ✅ |
 | `self:gh` | GitHub `cli/cli` | delegated to install source; left to `winget` when winget lists `GitHub.cli` | ✅ |

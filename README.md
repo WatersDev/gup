@@ -4,7 +4,7 @@
 
 **One command to scan and update everything installed on your machine.**
 
-[**Homepage**](https://lindecker-charles.github.io/gup/) · [**Documentation**](docs/) · [**Providers (153)**](docs/guide/providers-catalog.md) · [**npm**](https://www.npmjs.com/package/@charles_lindecker/gup)
+[**Homepage**](https://lindecker-charles.github.io/gup/) · [**Documentation**](docs/) · [**Providers (154)**](docs/guide/providers-catalog.md) · [**npm**](https://www.npmjs.com/package/@charles_lindecker/gup)
 
 [![npm](https://img.shields.io/npm/v/@charles_lindecker/gup?logo=npm&color=CB3837)](https://www.npmjs.com/package/@charles_lindecker/gup)
 [![npm downloads](https://img.shields.io/npm/dm/@charles_lindecker/gup?logo=npm&color=CB3837&label=downloads)](https://www.npmjs.com/package/@charles_lindecker/gup)
@@ -15,7 +15,7 @@
 
 <img src="https://raw.githubusercontent.com/LINDECKER-Charles/gup/main/docs/assets/screens/packages-select.svg" alt="The gup interactive app: 12 outdated packages grouped by provider, some checked, scheduled packages marked, a failed Scoop scan shown inline, and the update button at the bottom." width="812">
 
-<sub>winget · scoop · choco · MSYS2 · brew · casks · Mac App Store · MacPorts · Sparkle · Nix · apt · dnf · npm · pnpm · yarn · bun · pip · pipx · uv · cargo · gem · composer · dotnet SDK &amp; tools · vcpkg · helm · kubectl · terraform · VS Code · JetBrains · Visual Studio · WSL distros — **153 providers**</sub>
+<sub>winget · scoop · choco · MSYS2 · brew · casks · Mac App Store · MacPorts · Sparkle · Nix · apt · dnf · npm · pnpm · yarn · bun · Vite+ · pip · pipx · uv · cargo · gem · composer · dotnet SDK &amp; tools · vcpkg · helm · kubectl · terraform · VS Code · JetBrains · Visual Studio · WSL distros — **154 providers**</sub>
 
 </div>
 
@@ -29,7 +29,7 @@ or your VS Code extensions, `ncu -g` only sees npm, and every cloud CLI ships it
 
 ## Highlights
 
-- **153 providers**, scanned in parallel — OS package managers, language toolchains, cloud and
+- **154 providers**, scanned in parallel — OS package managers, language toolchains, cloud and
   Kubernetes CLIs, editor extensions — each greyed out on the systems it does not exist on.
 - **Pick exactly what to update**: check packages, press Enter — only what is checked is
   updated.
@@ -126,6 +126,7 @@ The commands never prompt with `-y`, write JSON with `--json` and say how it wen
 | [Journal and reports](docs/guide/journal-and-reports.md) | The activity history, the Journal view, the HTML report, the debug log |
 | [Configuration](docs/guide/configuration.md) · [Themes and accessibility](docs/guide/themes-and-accessibility.md) | Settings, the interface language, the settings file, themes, the contrast guarantee |
 | [Troubleshooting](docs/guide/troubleshooting.md) | Messages, causes, fixes; where gup keeps its files; collecting a diagnostic |
+| [Scope](docs/guide/scope.md) · [Providers catalog](docs/guide/providers-catalog.md) | What `gup` covers, and the 154 providers |
 | [Feedback and sharing](docs/guide/feedback-and-sharing.md) | `gup feedback` and the feedback form; opt-in sharing of your redacted journals, and how to stop |
 | [Scope](docs/guide/scope.md) · [Providers catalog](docs/guide/providers-catalog.md) | What `gup` covers, and the 153 providers |
 | [Architecture](docs/development/architecture.md) · [How `gup` works](docs/development/how-gup-works.md) | Layers, pipelines, process seams, local state — with diagrams |

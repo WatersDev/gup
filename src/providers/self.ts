@@ -16,8 +16,8 @@ import { pythonBehind } from "./python/python-behind.js";
 /**
  * Meta-provider that surfaces self-updates of the package managers themselves
  * (the binaries `gup` orchestrates). Per `docs/guide/providers-catalog.md` § 10:
- * tracks winget, scoop, choco, npm, pnpm, yarn, pip, pipx and gh — plus brew,
- * the same role on macOS/Linuxbrew.
+ * tracks winget, scoop, choco, npm, pnpm, yarn, Vite+ (vp), pip, pipx and gh —
+ * plus brew, the same role on macOS/Linuxbrew.
  *
  * Each target advertises its current version via its own `--version` output
  * and compares it against the canonical upstream registry/release feed
@@ -370,6 +370,27 @@ const TARGETS: SelfTarget[] = [
       }
       const res = await runInherit("npm", ["install", "-g", "yarn"]);
       return { id: "yarn", success: !res.failed };
+    },
+  },
+
+  // Vite+ (`vp`) installs itself from `irm https://vite.plus/ps1 | iex` (or
+  // the `curl … | bash` script) and ships its own self-updater. `vp --version`
+  // prints "vp v1.7.0" on its first line, then a report of the project's
+  // local tools; `vp upgrade` resolves its target from the `vite-plus` npm
+  // package, so the registry is the feed to compare against. The global
+  // packages `vp` manages are the `vp-g` provider's.
+  {
+    id: "vp",
+    displayName: "Vite+",
+    binary: "vp",
+    current: async () => {
+      const out = await runStdout("vp", ["--version"]);
+      return parseFirstSemver(out.split(/\r?\n/)[0] ?? "");
+    },
+    latest: async () => fetchNpmLatest("vite-plus"),
+    update: async () => {
+      const res = await runInherit("vp", ["upgrade"]);
+      return { id: "vp", success: !res.failed };
     },
   },
 
